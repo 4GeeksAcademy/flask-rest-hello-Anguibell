@@ -94,9 +94,12 @@ class Planeta(db.Model):
     
 class Favorite(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship(User)
     favorite_personaje = db.Column(db.Integer, db.ForeignKey("personaje.id"))
+    personaje = db.relationship(Personaje)
     favorite_planeta = db.Column(db.Integer, db.ForeignKey("planeta.id"))
+    planeta = db.relationship(Planeta)
 
     def __init__(self, id, user, favorite_personaje, favorite_planeta):
         self.id = id
