@@ -38,15 +38,13 @@ class User(db.Model):
 class Personaje(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
-    #planeta_origen = db.Column(db.Integer, db.ForeignKey("planeta.id"))
     altura = db.Column(db.Float, nullable=False)
     peso = db.Column(db.Float, nullable=False)
     unidades_peso = db.Column(db.String(250), nullable=False)
     unidades_altura = db.Column(db.String(250), nullable=False)
 
-    def __init__(self, name, planeta_origen, altura, peso, unidades_peso, unidades_altura):
+    def __init__(self, name, altura, peso, unidades_peso, unidades_altura):
         self.name = name
-        self.planeta_origen = planeta_origen
         self.altura = altura
         self.peso = peso
         self.unidades_peso = unidades_peso
@@ -56,7 +54,6 @@ class Personaje(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "planeta_origen": self.planeta_origen,
             "altura": self.altura,
             "peso": self.peso,
             "unidades_peso": self.unidades_peso,
@@ -96,21 +93,20 @@ class Favorite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship(User)
-    favorite_personaje = db.Column(db.Integer, db.ForeignKey("personaje.id"))
+    favorite_personaje = db.Column(db.Integer, db.ForeignKey("personaje.id"), nullable=True)
     personaje = db.relationship(Personaje)
-    favorite_planeta = db.Column(db.Integer, db.ForeignKey("planeta.id"))
+    favorite_planeta = db.Column(db.Integer, db.ForeignKey("planeta.id"), nullable=True)
     planeta = db.relationship(Planeta)
 
-    def __init__(self, id, user, favorite_personaje, favorite_planeta):
-        self.id = id
+    def __init__(self, user, personaje, planeta):
         self.user = user
-        self.favorite_personaje = favorite_personaje
-        self.favorite_planeta = favorite_planeta
+        self.personaje = personaje
+        self.planeta = planeta
 
     def serialize(self):
         return {
             "id": self.id,
-            "user": self.user,
-            "favorite_personaje": self.favorite_personaje,
-            "favorite_planeta": self.favorite_planeta,
+            "user": self.user.serialize(),
+            "personaje": self.personaje.serialize(),
+            "planeta": self.planeta.serialize(),
         }

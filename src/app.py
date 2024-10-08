@@ -106,10 +106,6 @@ def new_favorites():
 
     if user_id == None:
         return jsonify({"error": f"Missing with user_id not found"}), 400
-    if personaje_id == None:
-        return jsonify({"error": f"Missing with personaje_id not found"}), 400
-    if planeta_id == None:
-        return jsonify({"error": f"Missing with planeta_id not found"})
 
     user = User.query.get(user_id)
     personaje = Personaje.query.get(personaje_id)
@@ -117,10 +113,6 @@ def new_favorites():
 
     if user == None:
         return jsonify({"error": f"Missing with id {user_id} not found"}), 400
-    if personaje == None:
-        return jsonify({"error": f"Missing with id {personaje_id} not found"}), 400
-    if planeta == None:
-        return jsonify({"error": f"Missing with id {planeta_id} not found"}), 400
     
     new_favorite = Favorite(user, personaje, planeta)
     db.session.add(new_favorite)
